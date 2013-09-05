@@ -3,7 +3,7 @@ Auto close brackets for Vim
 
 Huh? There is a ton of such plugins? Another one?
 
-Unfortunately Latest Vim (7.4) broke some hacks which allow to keep
+Unfortunately latest Vim (7.4) broke some hacks which allow to keep
 undo/repeat sequence.
 
 vial-cramp tries to bring this functionality back without any hacks but
@@ -24,7 +24,6 @@ Mappings
 --------
 
 <Plug>VialCrampLeave
-
     You must map this to key which leaves insert mode.
 
     For example::
@@ -35,7 +34,6 @@ Mappings
         imap jk <Plug>VialCrampLeave
 
 <Plug>VialCrampSkip
-
     Skips closing bracket
 
 
