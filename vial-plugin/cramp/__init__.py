@@ -6,7 +6,10 @@ BRACKETS = (
     ('[', ']'),
     ('{', '}'),
     ('\'', '\''),
+    ('"', '"'),
 )
+
+OPEN2CLOSE = dict(BRACKETS)
 
 tail = []
 
@@ -14,14 +17,19 @@ def init():
     register_function('<SID>VialCrampClose(what)',  close)
     register_function('<SID>VialCrampLeave()', leave)
     register_function('<SID>VialCrampSkip()', skip)
+    register_function('<SID>VialCrampBS()', backspace)
 
     vim.command('inoremap <Plug>VialCrampLeave <c-r>=<SID>VialCrampLeave()<cr><esc>')
     vim.command('inoremap <Plug>VialCrampSkip <c-r>=<SID>VialCrampSkip()<cr>')
 
+    vim.command('inoremap <bs> <c-r>=<SID>VialCrampBS()<cr><bs>')
+
     for s, e in BRACKETS:
+        if e == '"':
+            e = '\\"'
+
         vim.command('inoremap {0} {0}<c-r>=<SID>VialCrampClose("{1}")<cr>'.format(s, e))
 
-    vim.command('inoremap " "<c-r>=<SID>VialCrampClose(\'"\')<cr>')
 
 @vimfunction
 def close(what):
@@ -53,3 +61,15 @@ def skip():
         tail.pop(0)
 
     return char
+
+@vimfunction
+def backspace():
+    col = vim.current.window.cursor[1]
+    lchar = vim.current.line[col-1]
+    rchar = vim.current.line[col]
+
+    if tail and lchar in OPEN2CLOSE and OPEN2CLOSE[lchar] == rchar and rchar == tail[0]:
+        vim.current.line = vim.current.line[:col] + vim.current.line[col+1:]
+        tail.pop(0)
+
+    return ''

@@ -53,5 +53,3 @@ TODO
 * configurable list of pairs
 
 * support for multichar brackets
-
-* handle BackSpace key
