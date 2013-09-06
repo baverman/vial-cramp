@@ -40,11 +40,13 @@ Mappings
 
         imap <esc> <Plug>VialCrampLeave
 
-        # I prefer jk
+        " I prefer jk
         imap jk <Plug>VialCrampLeave
 
 <Plug>VialCrampSkip
-    Skips closing bracket
+    Skips closing bracket::
+
+        imap <c-l> <Plug>VialCrampSkip
 
 
 TODO
