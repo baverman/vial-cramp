@@ -65,8 +65,12 @@ def skip():
 @vimfunction
 def backspace():
     col = vim.current.window.cursor[1]
-    lchar = vim.current.line[col-1]
-    rchar = vim.current.line[col]
+
+    try:
+        lchar = vim.current.line[col-1]
+        rchar = vim.current.line[col]
+    except IndexError:
+        return ''
 
     if tail and lchar in OPEN2CLOSE and OPEN2CLOSE[lchar] == rchar and rchar == tail[0]:
         vim.current.line = vim.current.line[:col] + vim.current.line[col+1:]
