@@ -20,6 +20,16 @@ Features
 * mapping to skip close bracket
 
 
+Installation
+------------
+
+vial-cramp is pathogen friendly and only requires vial to be installed::
+    
+    cd ~/.vim/bundle
+    git clone https://github.com/baverman/vial.git
+    git clone https://github.com/baverman/vial-cramp.git
+
+
 Mappings
 --------
 
@@ -39,6 +49,8 @@ Mappings
 
 TODO
 ----
+
+* configurable list of pairs
 
 * support for multichar brackets
 
