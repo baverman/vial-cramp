@@ -1,5 +1,5 @@
 from vial import vim, register_function
-from vial.utils import vimfunction
+from vial.utils import vimfunction, get_key_code
 
 BRACKETS = (
     ('(', ')'),
@@ -20,11 +20,13 @@ def init():
     register_function('<SID>VialCrampLeave()', leave)
     register_function('<SID>VialCrampSkip()', skip)
     register_function('<SID>VialCrampBS()', backspace)
+    register_function('<SID>VialCrampCR()', cr)
 
     vim.command('inoremap <Plug>VialCrampLeave <c-r>=<SID>VialCrampLeave()<cr><esc>')
     vim.command('inoremap <Plug>VialCrampSkip <c-r>=<SID>VialCrampSkip()<cr>')
 
     vim.command('inoremap <bs> <c-r>=<SID>VialCrampBS()<cr><bs>')
+    vim.command('inoremap <cr> <cr><c-r>=<SID>VialCrampCR()<cr>')
 
     for s, e in BRACKETS:
         ss = s.replace('"', '\\"')
@@ -91,12 +93,20 @@ def leave():
     if not tail:
         return ''
 
-    col = vim.current.window.cursor[1]
-    modify_current_line(col, '', col + len(tail))
+    pos = vim.current.window.cursor
+    buf = vim.current.buffer
+    line, col = pos
+    result = ''
+    for r in tail:
+        if r == 'nl':
+            result += get_key_code('cr') + get_key_code('c-d')
+            buf[line-1] += buf[line].lstrip()
+            del buf[line]
+        else:
+            modify_current_line(col, '', col + len(r))
+            result += r
 
-    result = ''.join(tail)
     tail[:] = []
-
     return result
 
 @vimfunction
@@ -125,3 +135,21 @@ def backspace():
         tail.pop(0)
 
     return ''
+
+def get_ws(line):
+    return line[:len(line) - len(line.lstrip())]
+
+@vimfunction
+def cr():
+    line, col = vim.current.window.cursor
+    buf = vim.current.buffer
+    pspace = get_ws(buf[line-2])
+    cline = buf[line-1]
+
+    if pspace == get_ws(cline):
+        return 
+
+    tail.insert(0, 'nl')
+    modify_current_line(col, '', len(cline))
+    buf.append(pspace + cline[col:], line)
+
