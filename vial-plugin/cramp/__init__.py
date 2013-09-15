@@ -143,13 +143,24 @@ def get_ws(line):
 def cr():
     line, col = vim.current.window.cursor
     buf = vim.current.buffer
-    pspace = get_ws(buf[line-2])
+    pline = buf[line-2]
+    pspace = get_ws(pline)
     cline = buf[line-1]
 
     if pspace == get_ws(cline):
         return 
 
-    tail.insert(0, 'nl')
+    sline = cline.lstrip()
+    if not sline or sline[0] not in (')', ']', '}'):
+        return
+
+    sline = pline.rstrip()
+    if not sline or sline[-1] not in ('(', '[', '{'):
+        return
+
+    if tail:
+        tail.insert(0, 'nl')
+
     modify_current_line(col, '', len(cline))
     buf.append(pspace + cline[col:], line)
 
