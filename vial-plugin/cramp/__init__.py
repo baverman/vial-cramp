@@ -12,31 +12,33 @@ BRACKETS = (
 OPEN2CLOSE = dict(BRACKETS)
 
 tail = []
+undo_breaked = False
 
 def init():
-    register_function('<SID>VialCrampClose()',  close)
-    register_function('<SID>VialCrampOpen(end)',  open)
-    register_function('<SID>VialCrampOpenClose(start)',  open_close)
-    register_function('<SID>VialCrampLeave()', leave)
-    register_function('<SID>VialCrampSkip()', skip)
-    register_function('<SID>VialCrampBS()', backspace)
-    register_function('<SID>VialCrampCR()', cr)
+    register_function('<SID>Close()',  close)
+    register_function('<SID>Open(end)',  open)
+    register_function('<SID>OpenClose(start)',  open_close)
+    register_function('<SID>Leave()', leave)
+    register_function('<SID>Skip()', skip)
+    register_function('<SID>BS()', backspace)
+    register_function('<SID>CR()', cr)
+    register_function('<SID>BreakUndo()', break_undo)
 
-    vim.command('inoremap <Plug>VialCrampLeave <c-r>=<SID>VialCrampLeave()<cr><esc>')
-    vim.command('inoremap <Plug>VialCrampSkip <c-r>=<SID>VialCrampSkip()<cr>')
+    vim.command('inoremap <Plug>VialCrampLeave <c-r>=<SID>Leave()<cr><esc>')
+    vim.command('inoremap <Plug>VialCrampSkip <c-r>=<SID>Skip()<cr>')
 
-    vim.command('inoremap <bs> <c-r>=<SID>VialCrampBS()<cr><bs>')
-    vim.command('inoremap <cr> <cr><c-r>=<SID>VialCrampCR()<cr>')
+    vim.command('inoremap <bs> <c-r>=<SID>BS()<cr><bs>')
+    vim.command('inoremap <cr> <c-r>=<SID>BreakUndo()<cr><cr><c-r>=<SID>CR()<cr>')
 
     for s, e in BRACKETS:
         ss = s.replace('"', '\\"')
         ee = e.replace('"', '\\"')
 
         if s == e:
-            vim.command('inoremap {0} {0}<c-r>=<SID>VialCrampOpenClose("{1}")<cr>'.format(s, ss))
+            vim.command('inoremap {0} {0}<c-r>=<SID>OpenClose("{1}")<cr>'.format(s, ss))
         else:
-            vim.command('inoremap {0} {0}<c-r>=<SID>VialCrampOpen("{1}")<cr>'.format(s, ee))
-            vim.command('inoremap {0} {0}<c-r>=<SID>VialCrampClose()<cr>'.format(e))
+            vim.command('inoremap {0} {0}<c-r>=<SID>Open("{1}")<cr>'.format(s, ee))
+            vim.command('inoremap {0} {0}<c-r>=<SID>Close()<cr>'.format(e))
 
 
 def modify_current_line(left, mid, right):
@@ -90,6 +92,7 @@ def open(end):
 
 @vimfunction
 def leave():
+    undo_breaked = False
     if not tail:
         return ''
 
@@ -163,4 +166,13 @@ def cr():
 
     modify_current_line(col, '', len(cline))
     buf.append(pspace + cline[col:], line)
+
+@vimfunction
+def break_undo():
+    global undo_breaked
+    if not undo_breaked:
+        undo_breaked = True
+        return get_key_code('c-g') + 'u'
+
+
 
