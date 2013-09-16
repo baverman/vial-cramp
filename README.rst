@@ -55,3 +55,5 @@ TODO
 * configurable list of pairs
 
 * support for multichar brackets
+
+* skip over new lines

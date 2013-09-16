@@ -92,7 +92,9 @@ def open(end):
 
 @vimfunction
 def leave():
+    global undo_breaked
     undo_breaked = False
+
     if not tail:
         return ''
 
