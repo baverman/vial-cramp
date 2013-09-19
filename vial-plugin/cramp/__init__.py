@@ -1,5 +1,5 @@
 from vial import vim, register_function
-from vial.utils import vimfunction, get_key_code
+from vial.utils import vimfunction, get_key_code, get_ws_len
 
 BRACKETS = (
     ('(', ')'),
@@ -140,9 +140,6 @@ def backspace():
         tail.pop(0)
 
     return ''
-
-def get_ws(line):
-    return line[:len(line) - len(line.lstrip())]
 
 @vimfunction
 def cr():
