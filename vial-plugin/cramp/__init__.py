@@ -1,5 +1,5 @@
 from vial import vim, register_function
-from vial.utils import vimfunction, get_key_code, get_ws_len
+from vial.utils import vimfunction, get_key_code, get_ws
 
 BRACKETS = (
     ('(', ')'),
