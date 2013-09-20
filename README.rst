@@ -15,9 +15,11 @@ Features
 
 * closes () {} [] '' ""
 
-* keeps undo/repeat
+* keeps repeat (undo breaked too hard)
 
 * mapping to skip close bracket
+
+* handle <cr>
 
 
 Installation

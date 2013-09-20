@@ -12,7 +12,6 @@ BRACKETS = (
 OPEN2CLOSE = dict(BRACKETS)
 
 tail = []
-undo_breaked = False
 
 def init():
     register_function('<SID>Close()',  close)
@@ -22,13 +21,12 @@ def init():
     register_function('<SID>Skip()', skip)
     register_function('<SID>BS()', backspace)
     register_function('<SID>CR()', cr)
-    register_function('<SID>BreakUndo()', break_undo)
 
     vim.command('inoremap <Plug>VialCrampLeave <c-r>=<SID>Leave()<cr><esc>')
     vim.command('inoremap <Plug>VialCrampSkip <c-r>=<SID>Skip()<cr>')
 
     vim.command('inoremap <bs> <c-r>=<SID>BS()<cr><bs>')
-    vim.command('inoremap <cr> <c-r>=<SID>BreakUndo()<cr><cr><c-r>=<SID>CR()<cr>')
+    vim.command('inoremap <cr> <cr><c-r>=<SID>CR()<cr>')
 
     for s, e in BRACKETS:
         ss = s.replace('"', '\\"')
@@ -92,9 +90,6 @@ def open(end):
 
 @vimfunction
 def leave():
-    global undo_breaked
-    undo_breaked = False
-
     if not tail:
         return ''
 
@@ -165,13 +160,5 @@ def cr():
 
     modify_current_line(col, '', len(cline))
     buf.append(pspace + cline[col:], line)
-
-@vimfunction
-def break_undo():
-    global undo_breaked
-    if not undo_breaked:
-        undo_breaked = True
-        return get_key_code('c-g') + 'u'
-
 
 
