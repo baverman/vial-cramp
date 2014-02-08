@@ -13,6 +13,7 @@ OPEN2CLOSE = dict(BRACKETS)
 
 tail = []
 
+
 def init():
     register_function('<SID>Close()',  close)
     register_function('<SID>Open(end)',  open)
@@ -43,6 +44,7 @@ def modify_current_line(left, mid, right):
     l = vim.current.line
     vim.current.line = l[:left] + mid + l[right:]
 
+
 @vimfunction
 def close():
     col = vim.current.window.cursor[1]
@@ -60,6 +62,7 @@ def close():
                 modify_current_line(col, '', col + len(end))
 
     return ''
+
 
 @vimfunction
 def open_close(start):
@@ -81,12 +84,14 @@ def open_close(start):
     modify_current_line(col, start, col)
     return ''
 
+
 @vimfunction
 def open(end):
     tail.insert(0, end)
     col = vim.current.window.cursor[1]
     modify_current_line(col, end, col)
     return ''
+
 
 @vimfunction
 def leave():
@@ -109,6 +114,7 @@ def leave():
     tail[:] = []
     return result
 
+
 @vimfunction
 def skip():
     col = vim.current.window.cursor[1]
@@ -119,6 +125,7 @@ def skip():
         tail.pop(0)
 
     return char
+
 
 @vimfunction
 def backspace():
@@ -136,6 +143,7 @@ def backspace():
 
     return ''
 
+
 @vimfunction
 def cr():
     line, col = vim.current.window.cursor
@@ -145,7 +153,7 @@ def cr():
     cline = buf[line-1]
 
     if pspace == get_ws(cline):
-        return 
+        return
 
     sline = cline.lstrip()
     if not sline or sline[0] not in (')', ']', '}'):
@@ -160,5 +168,3 @@ def cr():
 
     modify_current_line(col, '', len(cline))
     buf.append(pspace + cline[col:], line)
-
-
