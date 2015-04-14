@@ -26,7 +26,7 @@ def init():
         ss = s.replace('"', '\\"')
         ee = e.replace('"', '\\"')
         if s == e:
-            vim.command('inoremap {0} {0}<c-r>=<SID>OpenClose("{1}")<cr>'.format(s, ss))
+            vim.command('inoremap {0} {0}<c-r>=<SID>OpenClose("{1}")<cr>{0}<left>'.format(s, ss))
         else:
             vim.command('inoremap {0} {0}{1}<left>'.format(s, e))
             vim.command('inoremap {0} {0}<c-r>=<SID>OpenClose("{1}")<cr>'.format(e, ee))
