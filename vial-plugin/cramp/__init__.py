@@ -1,5 +1,5 @@
 from vial import vim, register_function
-from vial.utils import vimfunction, get_key_code, get_ws, parse_keys
+from vial.utils import get_key_code, get_ws, parse_keys
 
 BRACKETS = (
     ('(', ')'),
@@ -32,7 +32,6 @@ def init():
             vim.command('inoremap {0} {0}<c-r>=<SID>OpenClose("{1}")<cr>'.format(e, ee))
 
 
-@vimfunction
 def open_close(start):
     col = vim.current.window.cursor[1]
 
@@ -47,7 +46,6 @@ def open_close(start):
     return ''
 
 
-@vimfunction
 def backspace():
     col = vim.current.window.cursor[1]
 
@@ -62,7 +60,6 @@ def backspace():
     return ''
 
 
-@vimfunction
 def cr():
     line, col = vim.current.window.cursor
     buf = vim.current.buffer
