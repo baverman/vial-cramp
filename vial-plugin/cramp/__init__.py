@@ -17,7 +17,7 @@ def init():
     register_function('<SID>OpenClose(start)', open_close)
 
     vim.command('inoremap <Plug>VialCrampLeave <esc>')
-    vim.command('inoremap <Plug>VialCrampSkip <right>')
+    vim.command('inoremap <Plug>VialCrampSkip <c-g>U<right>')
 
     vim.command('inoremap <bs> <c-r>=<SID>BS()<cr><bs>')
     vim.command('inoremap <cr> <cr><c-r>=<SID>CR()<cr>')
@@ -26,9 +26,9 @@ def init():
         ss = s.replace('"', '\\"')
         ee = e.replace('"', '\\"')
         if s == e:
-            vim.command('inoremap {0} {0}<c-r>=<SID>OpenClose("{1}")<cr>{0}<left>'.format(s, ss))
+            vim.command('inoremap {0} {0}<c-r>=<SID>OpenClose("{1}")<cr>{0}<c-g>U<left>'.format(s, ss))
         else:
-            vim.command('inoremap {0} {0}{1}<left>'.format(s, e))
+            vim.command('inoremap {0} {0}{1}<c-g>U<left>'.format(s, e))
             vim.command('inoremap {0} {0}<c-r>=<SID>OpenClose("{1}")<cr>'.format(e, ee))
 
 
