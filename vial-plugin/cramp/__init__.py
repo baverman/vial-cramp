@@ -78,4 +78,4 @@ def cr():
     if not sline or sline[-1] not in ('(', '[', '{'):
         return ''
 
-    return parse_keys('<cr><c-d><up><end>')
+    return parse_keys(' <cr><up><end><bs>')
