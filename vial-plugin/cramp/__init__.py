@@ -1,5 +1,5 @@
 from vial import vim, register_function
-from vial.utils import get_key_code, get_ws, parse_keys
+from vial.utils import get_key_code, get_ws
 
 BRACKETS = (
     ('(', ')'),
@@ -41,7 +41,7 @@ def open_close(start):
         pass
     else:
         if rchar == start:
-            return get_key_code('delete')
+            return get_key_code(r'\<delete>')
 
     return ''
 
@@ -53,11 +53,11 @@ def backspace():
         lchar = vim.current.line[col-1]
         rchar = vim.current.line[col]
         if lchar in OPEN2CLOSE and OPEN2CLOSE[lchar] == rchar:
-            return get_key_code('delete')
+            return get_key_code(r'\<delete>')
     except IndexError:
         pass
 
-    return ''
+    return b''
 
 
 def cr():
@@ -78,4 +78,4 @@ def cr():
     if not sline or sline[-1] not in ('(', '[', '{'):
         return ''
 
-    return parse_keys(' <cr><up><end><bs>')
+    return get_key_code(r' \<cr>\<up>\<end>\<bs>')
